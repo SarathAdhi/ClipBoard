@@ -84,7 +84,7 @@ const AddSection = () => {
             placeholder="Enter custom ID"
             value={uuid}
             className={clsx(
-              "w-auto",
+              "!w-auto",
               uuid
                 ? isUuidAvailable
                   ? "border-green-500"
@@ -94,11 +94,11 @@ const AddSection = () => {
             onChange={(e) => setUuid(e.target.value)}
           />
 
-          <Button className="flex-shrink-0" onClick={autoGenerateUniqueUuid}>
+          <Button onClick={autoGenerateUniqueUuid}>
             {isLoading ? (
               <img src="/loading.svg" className="animate-spin" />
             ) : (
-              "Generate ID"
+              <p className="flex-shrink-0">Generate ID</p>
             )}
           </Button>
         </div>
