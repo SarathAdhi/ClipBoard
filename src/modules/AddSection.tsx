@@ -24,6 +24,11 @@ const AddSection = () => {
       return;
     }
 
+    if (!isUuidAvailable) {
+      toast.error("ID not available");
+      return;
+    }
+
     try {
       await supabase.from("clipboard").insert({ uuid, text });
 
