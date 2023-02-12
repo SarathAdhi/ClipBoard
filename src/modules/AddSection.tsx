@@ -78,7 +78,7 @@ const AddSection = () => {
       <h2 className="w-full underline">Save to Clipboard:</h2>
 
       <div className="w-full grid gap-2 place-items-start">
-        <div className="flex items-center gap-2">
+        <div className="w-full flex items-center gap-2">
           <Input
             type="number"
             placeholder="Enter custom ID"
@@ -94,7 +94,7 @@ const AddSection = () => {
             onChange={(e) => setUuid(e.target.value)}
           />
 
-          <Button onClick={autoGenerateUniqueUuid}>
+          <Button className="!w-auto" onClick={autoGenerateUniqueUuid}>
             {isLoading ? (
               <img src="/loading.svg" className="animate-spin" />
             ) : (
