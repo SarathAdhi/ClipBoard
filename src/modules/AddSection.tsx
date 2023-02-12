@@ -94,7 +94,7 @@ const AddSection = () => {
             onChange={(e) => setUuid(e.target.value)}
           />
 
-          <Button className="!w-auto" onClick={autoGenerateUniqueUuid}>
+          <Button className="flex-shrink-0" onClick={autoGenerateUniqueUuid}>
             {isLoading ? (
               <img src="/loading.svg" className="animate-spin" />
             ) : (
