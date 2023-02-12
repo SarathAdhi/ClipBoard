@@ -78,13 +78,13 @@ const AddSection = () => {
       <h2 className="w-full underline">Save to Clipboard:</h2>
 
       <div className="w-full grid gap-2 place-items-start">
-        <div className="w-full flex items-center gap-2">
+        <div className="w-full flex items-center justify-end sm:justify-start flex-wrap gap-2">
           <Input
             type="number"
             placeholder="Enter custom ID"
             value={uuid}
             className={clsx(
-              "!w-auto",
+              "sm:w-auto",
               uuid
                 ? isUuidAvailable
                   ? "border-green-500"
