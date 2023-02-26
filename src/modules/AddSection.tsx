@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { Input } from "../common/components/elements/Input";
 import clsx from "clsx";
 import { AppContext } from "../common/context/Provider";
+import { RotatingLines } from "react-loader-spinner";
 
 const AddSection = () => {
   const [text, setText] = useState("");
@@ -125,7 +126,7 @@ const AddSection = () => {
 
           <Button type="button" onClick={autoGenerateUniqueUuid}>
             {isLoading ? (
-              <img src="/loading.svg" className="animate-spin" />
+              <RotatingLines width="28" visible={true} />
             ) : (
               <p className="flex-shrink-0">Generate ID</p>
             )}
