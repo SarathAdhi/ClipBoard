@@ -75,9 +75,11 @@ const RetrieveSection = () => {
 
       <form
         onSubmit={findClipBoard}
-        className="w-full grid gap-2 place-items-start"
+        className="w-full grid gap-4 place-items-start"
       >
         <Input
+          name="retrieve-id"
+          label="Retrieve ID"
           placeholder="Enter the retrieve ID"
           type="text"
           onChange={(e) => setClipBoardUuid(e.target.value.toLowerCase())}
@@ -86,6 +88,8 @@ const RetrieveSection = () => {
 
         {isTextEditable && (
           <Input
+            name="password"
+            label="Password"
             placeholder="Enter your password"
             type="password"
             value={password}
@@ -104,7 +108,7 @@ const RetrieveSection = () => {
           <>
             <hr className="w-full border-black border my-2 rounded-lg" />
 
-            <div className="w-full">
+            <div className="w-full grid gap-2">
               <TextArea
                 value={clipBoardText}
                 rows={6}
@@ -112,7 +116,7 @@ const RetrieveSection = () => {
                 disabled={!enableTextEditing}
               />
 
-              <div className="flex justify-between items-end flex-wrap">
+              <div className="flex justify-between items-start flex-wrap gap-2">
                 <p>
                   Text automatically copied to your <strong>Clipboard</strong>.
                 </p>

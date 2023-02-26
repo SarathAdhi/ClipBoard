@@ -102,12 +102,15 @@ const AddSection = () => {
 
       <form
         onSubmit={saveClipBoard}
-        className="w-full grid gap-2 place-items-start"
+        className="w-full grid gap-4 place-items-start"
       >
-        <div className="w-full flex items-center justify-end sm:justify-start flex-wrap gap-2">
+        <div className="w-full flex items-end justify-end sm:justify-start flex-wrap gap-2">
           <Input
+            label="Clipboard ID"
+            name="id"
             placeholder="Enter custom ID"
             value={uuid}
+            conatinerClassName="sm:w-auto"
             className={clsx(
               "sm:w-auto",
               uuid
@@ -127,19 +130,23 @@ const AddSection = () => {
               <p className="flex-shrink-0">Generate ID</p>
             )}
           </Button>
-
-          {isTextEditable && (
-            <Input
-              placeholder="Enter a password. This is needed when you edit it."
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          )}
         </div>
 
+        {isTextEditable && (
+          <Input
+            name="password"
+            label="Clipboard Password"
+            type="password"
+            placeholder="Enter a password. This is needed when you edit it."
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        )}
+
         <TextArea
+          name="text"
+          label="Clipboard Text"
           value={text}
           placeholder="Type something here"
           rows={6}
