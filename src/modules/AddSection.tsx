@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button } from "../common/components/elements/Button";
 import { TextArea } from "../common/components/elements/TextArea";
 import { supabase } from "../lib/supabase";
@@ -6,19 +6,52 @@ import { uuid as funcUuid } from "../utils/uuid";
 import { toast } from "react-hot-toast";
 import { Input } from "../common/components/elements/Input";
 import clsx from "clsx";
+import { AppContext } from "../common/context/Provider";
 
 const AddSection = () => {
   const [text, setText] = useState("");
   const [uuid, setUuid] = useState("");
+  const [password, setPassword] = useState("");
   const [clipBoardUuid, setClipBoardUuid] = useState("");
   const [isUuidAvailable, setIsUuidAvailable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const context = useContext(AppContext);
+
+  const { saveClipBoardId } = context;
+
   useEffect(() => {
-    checkForUuidAvailability(uuid);
+    setUuid(saveClipBoardId);
+  }, [saveClipBoardId]);
+
+  useEffect(() => {
+    checkForUuidAvailability();
   }, [uuid]);
 
-  async function saveClipBoard() {
+  const isTextEditable = uuid?.split("-")[1]?.toLowerCase() === "e";
+
+  async function checkForUuidAvailability() {
+    if (!uuid) {
+      setIsUuidAvailable(false);
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { data } = await supabase
+      .from(isTextEditable ? "clipboard-edit" : "clipboard")
+      .select("*")
+      .eq("uuid", uuid);
+
+    if (data && data.length !== 0) setIsUuidAvailable(false);
+    else setIsUuidAvailable(true);
+
+    setIsLoading(false);
+  }
+
+  async function saveClipBoard(e: React.FormEvent) {
+    e.preventDefault();
+
     if (!text) {
       toast.error("Enter some TEXT");
       return;
@@ -30,32 +63,17 @@ const AddSection = () => {
     }
 
     try {
-      await supabase.from("clipboard").insert({ uuid, text });
+      if (isTextEditable)
+        await supabase.from("clipboard-edit").insert({ uuid, text, password });
+      else await supabase.from("clipboard").insert({ uuid, text });
 
-      setText("");
       setClipBoardUuid(uuid);
+      setText("");
+      setPassword("");
+      setUuid("");
     } catch (error) {
       toast.error("Something went wrong");
     }
-  }
-
-  async function checkForUuidAvailability(_uuid: string) {
-    if (!_uuid) {
-      setIsUuidAvailable(false);
-      return;
-    }
-
-    setIsLoading(true);
-
-    const { data } = await supabase
-      .from("clipboard")
-      .select("*")
-      .eq("uuid", _uuid);
-
-    if (data && data.length !== 0) setIsUuidAvailable(false);
-    else setIsUuidAvailable(true);
-
-    setIsLoading(false);
   }
 
   async function autoGenerateUniqueUuid() {
@@ -82,10 +100,12 @@ const AddSection = () => {
     <div className="card flex flex-col gap-4">
       <h2 className="w-full underline">Save to Clipboard:</h2>
 
-      <div className="w-full grid gap-2 place-items-start">
+      <form
+        onSubmit={saveClipBoard}
+        className="w-full grid gap-2 place-items-start"
+      >
         <div className="w-full flex items-center justify-end sm:justify-start flex-wrap gap-2">
           <Input
-            type="number"
             placeholder="Enter custom ID"
             value={uuid}
             className={clsx(
@@ -96,16 +116,27 @@ const AddSection = () => {
                   : "border-red-500"
                 : ""
             )}
-            onChange={(e) => setUuid(e.target.value)}
+            onChange={(e) => setUuid(e.target.value.toLowerCase())}
+            required
           />
 
-          <Button onClick={autoGenerateUniqueUuid}>
+          <Button type="button" onClick={autoGenerateUniqueUuid}>
             {isLoading ? (
               <img src="/loading.svg" className="animate-spin" />
             ) : (
               <p className="flex-shrink-0">Generate ID</p>
             )}
           </Button>
+
+          {isTextEditable && (
+            <Input
+              placeholder="Enter a password. This is needed when you edit it."
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          )}
         </div>
 
         <TextArea
@@ -113,9 +144,10 @@ const AddSection = () => {
           placeholder="Type something here"
           rows={6}
           onChange={(e) => setText(e.target.value)}
+          required
         />
 
-        <Button variant="success" onClick={saveClipBoard}>
+        <Button variant="success" type="submit">
           Save Text
         </Button>
 
@@ -125,12 +157,15 @@ const AddSection = () => {
 
             <img
               src="copy-icon.svg"
-              onClick={() => navigator.clipboard.writeText(clipBoardUuid)}
+              onClick={() => {
+                navigator.clipboard.writeText(clipBoardUuid);
+                toast.success("Copied to you clipboard");
+              }}
               className="w-5 h-5 cursor-pointer"
             />
           </div>
         )}
-      </div>
+      </form>
     </div>
   );
 };

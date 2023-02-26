@@ -15,6 +15,10 @@
   p {
     @apply text-base md:text-lg;
   }
+
+  kbd {
+    @apply bg-green-300 px-1 rounded-sm;
+  }
 }
 
 @layer components {
