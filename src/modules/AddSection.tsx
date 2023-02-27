@@ -170,6 +170,7 @@ const AddSection = () => {
                 toast.success("Copied to you clipboard");
               }}
               className="w-5 h-5 cursor-pointer"
+              alt="copy-text"
             />
           </div>
         )}
