@@ -9,7 +9,7 @@ const IntroSection = () => {
   return (
     <div className="card space-y-4">
       <h2 className="font-normal">
-        <strong>ClipBoard</strong> is a free online tool that help you to{" "}
+        <strong>0ClipBoard</strong> is a free online tool that help you to{" "}
         <strong>Copy</strong> and
         <strong> Retrieve Text</strong> between any devices. Just copy the text
         and share the ID.

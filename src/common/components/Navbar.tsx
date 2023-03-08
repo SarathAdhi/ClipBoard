@@ -8,7 +8,7 @@ const Navbar = () => {
             location.replace("/");
           }}
         >
-          ClipBoard
+          0ClipBoard
         </h1>
       </div>
     </header>
