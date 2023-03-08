@@ -4,19 +4,27 @@ import { Input } from "../common/components/elements/Input";
 import { TextArea } from "../common/components/elements/TextArea";
 import { supabase } from "../lib/supabase";
 import { toast } from "react-hot-toast";
+import { RotatingLines } from "react-loader-spinner";
 
 const RetrieveSection = () => {
-  const [clipBoardUuid, setClipBoardUuid] = useState("");
+  const urlParams = new URL(window.location.href).searchParams;
+  const cbId = urlParams.get("id");
+
+  const [clipBoardUuid, setClipBoardUuid] = useState(cbId || "");
   const [clipBoardText, setClipBoardText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [enableTextEditing, setEnableTextEditing] = useState(false);
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    if (cbId) findClipBoard();
+  }, [cbId]);
+
   const isTextEditable =
     clipBoardUuid?.split("-")[1]?.toLocaleLowerCase() === "e";
 
-  async function findClipBoard(e: React.FormEvent) {
-    e.preventDefault();
+  async function findClipBoard(e?: React.FormEvent) {
+    e?.preventDefault();
 
     setClipBoardText("");
 
@@ -82,6 +90,7 @@ const RetrieveSection = () => {
           label="Retrieve ID"
           placeholder="Enter the retrieve ID"
           type="text"
+          value={clipBoardUuid}
           onChange={(e) => setClipBoardUuid(e.target.value.toLowerCase())}
           required
         />
@@ -102,7 +111,7 @@ const RetrieveSection = () => {
           Retrieve Text
         </Button>
 
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <RotatingLines width="40" visible={true} />}
 
         {!!clipBoardText && (
           <>

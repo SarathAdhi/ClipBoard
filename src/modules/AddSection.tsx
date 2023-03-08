@@ -160,18 +160,34 @@ const AddSection = () => {
         </Button>
 
         {clipBoardUuid && (
-          <div className="flex items-center gap-2">
-            <p>Your Retrieve text ID: {clipBoardUuid}</p>
+          <div>
+            <div className="flex items-center gap-2">
+              <p>Your Retrieve text ID: {clipBoardUuid}</p>
 
-            <img
-              src="copy-icon.svg"
-              onClick={() => {
-                navigator.clipboard.writeText(clipBoardUuid);
-                toast.success("Copied to you clipboard");
-              }}
-              className="w-5 h-5 cursor-pointer"
-              alt="copy-text"
-            />
+              <img
+                src="copy-icon.svg"
+                onClick={() => {
+                  navigator.clipboard.writeText(clipBoardUuid);
+                  toast.success("Copied to you clipboard");
+                }}
+                className="w-5 h-5 cursor-pointer"
+                alt="copy-text"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                className="text-lg hover:underline"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${window.location.origin}/?id=${clipBoardUuid}`
+                  );
+                  toast.success("Copied to you clipboard");
+                }}
+              >
+                Share
+              </button>
+            </div>
           </div>
         )}
       </form>
